@@ -39,23 +39,24 @@ public struct Ant {
 
   private func sortAuxil() {
     for i in 0..<world.points.count {
-      world.aux[i].ratio =
-        if world.points[i].pheromone_value == 0
-          && world.points[Int(position.asciiValue! - Character("a").asciiValue!)].pheromone_value
-            == 0
-        {
-          1 / (world.aux[i].ratio * world.aux[i].ratio)
-        } else if world.points[Int(position.asciiValue! - Character("a").asciiValue!)]
-          .pheromone_value
-          == 0
-        {
-          world.points[i].pheromone_value
-            / world.aux[i].ratio
-        } else {
-          world.points[i].pheromone_value
-            * world.points[Int(position.asciiValue! - Character("a").asciiValue!)].pheromone_value
-            / (world.aux[i].ratio * world.aux[i].ratio)
-        }
+      world.aux[i].ratio = (world.points[i].pheromone_value + 1) / world.aux[i].ratio
+      // world.aux[i].ratio =
+      //   if world.points[i].pheromone_value == 0
+      //     && world.points[Int(position.asciiValue! - Character("a").asciiValue!)].pheromone_value
+      //       == 0
+      //   {
+      //     1 / (world.aux[i].ratio * world.aux[i].ratio)
+      //   } else if world.points[Int(position.asciiValue! - Character("a").asciiValue!)]
+      //     .pheromone_value
+      //     == 0
+      //   {
+      //     world.points[i].pheromone_value
+      //       / world.aux[i].ratio
+      //   } else {
+      //     world.points[i].pheromone_value
+      //       * world.points[Int(position.asciiValue! - Character("a").asciiValue!)].pheromone_value
+      //       / (world.aux[i].ratio * world.aux[i].ratio)
+      //   }
     }
     world.aux.sort(by: { $0.ratio >= $1.ratio })
   }
@@ -92,7 +93,7 @@ public struct Ant {
     var choice: Int
     var wrong_choice: Bool
     repeat {
-      choice = draw()
+      choice = roulette()
       wrong_choice = path.contains(world.aux[choice].name)
     } while wrong_choice
     return choice
@@ -125,7 +126,7 @@ public struct Ant {
   }
 
   public func printResults(_ i: Int) {
-    TextOutputStream.createLog(
+    print(
       "| \(i + 1) | \(is_full ? "yes" : "no") | \(path) | \(path.count) |\n"
     )
   }

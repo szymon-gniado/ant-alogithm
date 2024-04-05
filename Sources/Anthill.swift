@@ -22,7 +22,7 @@ public struct Anthill {
   }
 
   public func printResults() {
-    TextOutputStream.createLog(
+    print(
       """
       | ant | full | path | path length |
       | :--- | :--- | :--- | :--- |\n
